@@ -1,7 +1,30 @@
 # aws-mfa
-simple tool to deal with MFA when using AWS CLI
+Simple tool to deal with MFA when using AWS CLI
 
-this tool will request session token using `aws-mfa` profile and override the `default`
+Let say that you want to secure administrator access to your account, you cannot use `arn:aws:iam::aws:policy/AdministratorAccess` policy, because this policy will allow any access via CLI (or any API call).
+Even you activated MFA, this policy doesn't account the MFA device. Your MFA will **ONLY** used when you login via AWS Console.
+
+For that reason usually I create new policy like this
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "aws:MultiFactorAuthPresent": true
+                }
+            }
+        }
+    ]
+}
+```
+and use this policy instead of `arn:aws:iam::aws:policy/AdministratorAccess` for Admin access.
+
+This tool will request session token using `aws-mfa` profile and override the `default`
 profile with the result of the session token request
 
 ## How to use
