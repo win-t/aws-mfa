@@ -48,7 +48,8 @@ def main(argv):
                               '--serial-number', mfa_serial,
                               '--token-code', argv.token],
               stdin=DEVNULL,
-              stdout=PIPE)
+              stdout=PIPE,
+              check=True)
 
   out_obj = json.loads(proc.stdout.decode('utf-8'))
   if not config.has_section('default'):
